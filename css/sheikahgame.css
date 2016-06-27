@@ -1,0 +1,436 @@
+/*
+  silver C1C3B6
+  gold 928D6F
+  red F0577D
+  purple 6B5FAB
+*/
+
+html {
+  font-size: 14px;
+}
+
+* {
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+body.Sheikah *.learn {
+  font-family: Sheikah;
+}
+
+body.inverted.Sheikah,
+body.inverted.Sheikah * {
+  font-family: Sheikah;
+  letter-spacing: 4px;
+}
+
+body.inverted.Sheikah options-container .pannels .option-name {
+  font-size: 10px;
+}
+
+body.inverted.Sheikah *.learn {
+  font-family: sans-serif;
+}
+
+
+
+
+body, game-bg, options-container {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: hidden;
+}
+
+game-container {
+  position: absolute;
+  top: 10%;
+  height: 400px;
+  width: 900px;
+  left: 50%;
+  transform: translateX( -50% );
+  border-radius: 10px;
+  background-color: rgba( 0, 0, 0, 0.5 );
+  opacity: 1.0;
+  transition: opacity 0.25s ease-out;
+}
+
+game-container.paused {
+  opacity: 0.0;
+}
+
+game-container .top-left {
+  font-size: 45px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: #928D6F;
+}
+
+game-container .top-right {
+  font-size: 45px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #928D6F;
+}
+
+game-container .bottom-left {
+  font-size: 45px;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  color: #928D6F;
+}
+
+game-container .options-link {
+  font-size: 30px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: #C1C3B6;
+  cursor: pointer;
+}
+
+game-container .options-link * {
+  font-size: 35px;
+}
+
+game-container .learn-container {
+  position: absolute;
+  top: 30px;
+  display: block;
+  left: 65px;
+  right: 65px;
+  height: 50px;
+  text-align: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #C1C3B6;
+  letter-spacing: initial!important;
+}
+
+game-container .learn-container > * {
+  font-size: 34px;
+  width: 36px;
+  height: 100%;
+  display: inline-block;
+  text-shadow: 0px 0px 5px #000000, 0px 0px 50px #0087FF;
+  color: #FFFFFF;
+  position: relative;
+  vertical-align: middle;
+}
+game-container .learn-container .current:before {
+  content: " ";
+  position: absolute;
+  width: 40px;
+  height: 0px;
+  left: 50%;
+  transform: translateX( -50% );
+  bottom: -8px;
+  border-bottom: 4px solid #FFFFFF;
+}
+game-container .learn-container .correct {
+  text-shadow: 0px 0px 5px #000000, 0px 0px 20px #0087FF, 0px 0px 20px #0087FF, 0px 0px 50px #87EEFF;
+  color: #0087FF;
+}
+game-container .learn-container .incorrect {
+  text-shadow: 0px 0px 5px #000000, 0px 0px 50px #F0577D;
+  color: #6B5FAB;
+}
+
+game-container > .info-box {
+  position: absolute;
+  left: 360px;
+  top: 100px;
+  font-size: 20px;
+  color: #C1C3B6;
+  width: 480px;
+  height: 240px;
+}
+
+game-container > .info-box .knob-container {
+  width: 70px;
+}
+
+game-container > .info-box .streak {
+  display: inline-block;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 3px;
+  background-color: rgba( 0, 0, 0, 0.75 );
+  box-shadow: inset 0px 0px 2px #928D6F;
+  border: 1px solid #000000;
+  min-width: 50px;
+  text-align: center;
+}
+game-container > .info-box .negative {
+  color: #F0577D;
+}
+
+game-container > .info-box .term-streak {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  font-size: 20px;
+}
+game-container > .info-box .game-count {
+  position: absolute;
+  right: 0px;
+  top: 40px;
+  font-size: 20px;
+}
+game-container > .info-box .running-score {
+  position: absolute;
+  right: 0px;
+  top: 80px;
+  font-size: 20px;
+}
+game-container > .info-box .instruction {
+  position: absolute;
+  left: 0px;
+  top: 120px;
+  font-size: 20px;
+}
+
+game-container > game-item {
+  position: absolute;
+  top: 100px;
+  left: 60px;
+  bottom: 60px;
+  width: 240px;
+}
+
+game-container > game-item .reveal {
+  right: -15px;
+  top: -15px;
+  font-size: 22px;
+  height: 40px;
+  width: 60px;
+  padding-top: 6px;
+}
+
+game-container > game-item .streak {
+  right: -15px;
+  bottom: -15px;
+  font-size: 22px;
+  height: 40px;
+  width: 60px;
+  padding-top: 6px;
+}
+
+game-container > game-item > :first-child {
+  font-size: 150px;
+  text-align: center;
+  padding-top: 25px;
+  color: #FFFFFF;
+}
+
+game-container > game-item > .hylianSymbols-sheikah:first-child {
+  font-size: 244px;
+}
+
+game-item {
+  border-radius: 5px;
+  border: 5px solid rgba( 33, 33, 33, 0.5 );
+  padding: 5px;
+  background-color: rgba( 10, 10, 10, 0.75 );
+}
+
+game-item.empty {
+  background-color: rgba( 75, 75, 75, 0.75 );
+  opacity: 0.5;
+}
+
+game-item > :first-child {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  text-shadow: 0px 0px 5px #000000, 0px 0px 20px #0087FF;
+}
+
+game-item.active > :first-child {
+  background-color: #0087FF;
+  box-shadow: inset 0px 0px 15px #FFFFFF;
+  text-shadow: 0px 0px 5px #000000, 0px 0px 20px #444444;
+}
+
+game-item.bad > :first-child {
+  background-color: #6B5FAB;
+  box-shadow: inset 0px 0px 15px #F0577D;
+  text-shadow: 0px 0px 5px #000000, 0px 0px 20px #770000;
+}
+
+game-item.empty > :first-child {
+  background-color: transparent;
+  box-shadow: none;
+  text-shadow: 0px 0px 5px #000000, 0px 0px 20px #444444;
+}
+
+game-item > .reveal {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  color: #FFFFFF;
+  display: block;
+  height: 20px;
+  width: 30px;
+  border-radius: 2px;
+  background: #928D6F;
+  text-align: center;
+  border: 1px solid #000000;
+  box-shadow: inset 0px 0px 1px #000000;
+  font-size: 14px;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+game-item > .streak {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  color: #FFFFFF;
+  display: block;
+  height: 20px;
+  width: 30px;
+  border-radius: 2px;
+  background: #000000;
+  text-align: center;
+  border: 1px solid #000000;
+  box-shadow: inset 0px 0px 4px #928D6F;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+game-item > .streak.negative {
+  color: #F0577D;
+}
+
+
+options-container {
+  top: 100%;
+  transition: top 0.25s ease-out;
+  background-color: rgba( 75, 75, 75, 0.66 );
+}
+
+game-container.paused + options-container {
+  top: 0px;
+}
+
+options-container .title {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 100px;
+  text-align: center;
+  font-size: 36px;
+  line-height: 30px;
+  cursor: pointer;
+  padding-top: 20px;
+  color: #C1C3B6;
+  background-color: rgba( 0, 0, 0, 0.5 );
+}
+
+options-container .title-info {
+  font-size: 16px;
+  color: #C1C3B6;
+}
+
+options-container .pannels {
+  position: absolute;
+  top: 130px;
+  height: 100px;
+  width: 900px;
+  left: 50%;
+  transform: translateX( -50% );
+  text-align: center;
+  font-size: 0px;
+  letter-spacing: initial!important;
+}
+
+options-container .pannels .option {
+  display: inline-block;
+  color: #C1C3B6;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: bottom;
+  border-bottom: 3px solid #C1C3B6;
+  opacity: 0.75;
+  cursor: pointer;
+  transition: color 0.5s ease-out, border-bottom-color 0.5s ease-out;
+}
+options-container .pannels .showing {
+  opacity: 1.0;
+  color: #FFFFFF;
+  border-bottom-color: #FFFFFF;
+}
+
+options-container .pannels .option-name {
+  font-size: 14px;
+  display: none;
+  text-align: center;
+  width: 100%;
+}
+options-container .pannels .showing .option-name,
+options-container .pannels .option:hover .option-name {
+  display: block;
+}
+
+options-container .pannels .learn {
+  font-size: 50px;
+  position: absolute;
+  bottom: 15px;
+  transform: translateX( -50% );
+}
+
+options-container .pannel {
+  position: absolute;
+  top: 250px;
+  height: calc( 100% - 250px - 60px );
+  width: 900px;
+  left: 50%;
+  transform: translateX( -50% );
+}
+
+options-container .letter-list {
+  margin-left: 60px;
+  margin-right: 60px;
+  overflow-y: auto;
+  height: 100%;
+  letter-spacing: initial!important;
+}
+options-container .letter-list > game-item {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  margin-right: 12px;
+  cursor: pointer;
+  vertical-align: bottom;
+}
+
+options-container .letter-list > game-item > :first-child {
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 40px;
+  padding-top: 10px;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+}
