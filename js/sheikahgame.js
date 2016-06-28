@@ -243,7 +243,7 @@ can.Component.extend({
           var gameCount = this.attr( "gameCount" );
 
           do {
-            if ( infLoopCatch > 30 ) {
+            if ( infLoopCatch > 90 ) {
               return "Enable More Terms";
             }
 
@@ -567,7 +567,13 @@ var optionsTemplate = fcs(function(){/*!
       {{#case "L"}}
         <div class="letter-list">
           {{#each cachedLetters}}
-            <game-item {display}="term" class="{{termState( term )}}" reveal="1" {streak}="streak"></game-item>
+            <game-item
+              class="{{termState( term )}}"
+              {display}="term"
+              reveal="1"
+              {streak}="streak"
+              ($click)="toggleTermEnabled( . )"
+            ></game-item>
           {{/each}}
           <game-item {display}="" class="empty"></game-item>
           <game-item {display}="" class="empty"></game-item>
@@ -578,13 +584,28 @@ var optionsTemplate = fcs(function(){/*!
 
       {{#case "T"}}
         <div class="term-list">
-          terms
+          {{#each cachedTerms}}
+            <div class="entry {{termState( term )}}" ($click)="toggleTermEnabled( . )">
+              <div>{{term}}</div>
+            </div>
+          {{/each}}
         </div>
       {{/case}}
 
       {{#case "C"}}
         <div class="term-list">
-          custom terms
+          <div class="customTermInput">
+            Add Your Own Term<br>
+          </div>
+          <div class="entry empty">
+            <input type="text" {($value)}="customTermInput" ($change)="addCustomTerm()" maxlength="19">
+          </div>
+          <div class="entry doit"><span>ADD</span></div>
+          {{#each cachedCustomTerms}}
+            <div class="entry {{termState( term )}}" ($click)="toggleTermEnabled( . )">
+              <div>{{term}}</div>
+            </div>
+          {{/each}}
         </div>
       {{/case}}
 
@@ -629,7 +650,7 @@ can.Component.extend({
           if ( last ) {
             return last;
           }
-          var cachedLetters = [];
+          var cachedLetters = new can.List( [] );
           if ( this.functions && typeof this.functions.getTermInfo === "function" ) {
             var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split( "" );
             for ( var i = 0; i < letters.length; i++ ) {
@@ -637,6 +658,36 @@ can.Component.extend({
             }
           }
           return cachedLetters;
+        }
+      },
+      cachedTerms: {
+        get: function ( last ) {
+          if ( last ) {
+            return last;
+          }
+          var cachedTerms = new can.List( [] );
+          if ( this.functions && typeof this.functions.getTermInfo === "function" ) {
+            // terms === global array in listofterms.js
+            for ( var i = 0; i < terms.length; i++ ) {
+              cachedTerms.push( this.functions.getTermInfo( terms[ i ] ) );
+            }
+          }
+          return cachedTerms;
+        }
+      },
+      cachedCustomTerms: {
+        get: function ( last ) {
+          if ( last ) {
+            return last;
+          }
+          var cachedCustomTerms = new can.List( [] );
+          if ( this.functions && typeof this.functions.getTermInfo === "function" ) {
+            var terms = this.attr( "customTerms" );
+            for ( var i = 0; i < terms.length; i++ ) {
+              cachedCustomTerms.push( this.functions.getTermInfo( terms[ i ] ) );
+            }
+          }
+          return cachedCustomTerms;
         }
       }
     },
@@ -658,10 +709,34 @@ can.Component.extend({
         state = "bad";
       } else if ( term.length > 1 && !this.functions.termValidLetterCheck( term ) ) {
         state = "empty";
-      } else if ( this.functions.getTermInfo( term ).enabled ) {
+      } else if ( this.functions.getTermInfo( term ).attr( "enabled" ) ) {
         state = "active";
       }
       return state;
+    },
+    toggleTermEnabled: function ( termInfo ) {
+      var disabledTerms = this.attr( "disabledTerms" );
+
+      if ( termInfo.attr( "enabled" ) ) {
+        termInfo.attr( "enabled", false );
+        disabledTerms.push( termInfo.attr( "termLC" ) );
+        localStorage.setItem( "disabledTerms", disabledTerms.join( "`" ) );
+      } else {
+        termInfo.attr( "enabled", true );
+        disabledTerms.splice( disabledTerms.indexOf( termInfo.attr( "termLC" ) ), 1 );
+        localStorage.setItem( "disabledTerms", disabledTerms.join( "`" ) );
+      }
+    },
+    addCustomTerm: function () {
+      var val = this.attr( "customTermInput" );
+      this.attr( "customTermInput", "" );
+      if ( val.length > 1 && this.functions.termValidRxCheck( val ) ) {
+        this.attr( "customTerms" ).push( val );
+        this.attr( "cachedCustomTerms" ).push( this.functions.getTermInfo( val ) );
+        localStorage.setItem( "customTerms", this.attr( "customTerms" ).join( "`" ) );
+      } else {
+        //TODO: give user feedback
+      }
     }
   },
   events: {
@@ -673,6 +748,12 @@ can.Component.extend({
       if ( vm.functions && typeof vm.functions.togglePause === "function" ) {
         vm.functions.togglePause();
       }
+    },
+    ".term-list .entry > :first-child mouseenter": function ( $el ) {
+      $el.addClass( "learn" );
+    },
+    ".term-list .entry > :first-child mouseleave": function ( $el ) {
+      $el.removeClass( "learn" );
     }
   }
 });

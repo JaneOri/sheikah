@@ -239,19 +239,22 @@ game-container > game-item > .hylianSymbols-sheikah:first-child {
   font-size: 244px;
 }
 
-game-item {
+game-item,
+options-container .term-list .entry {
   border-radius: 5px;
   border: 5px solid rgba( 33, 33, 33, 0.5 );
   padding: 5px;
   background-color: rgba( 10, 10, 10, 0.75 );
 }
 
-game-item.empty {
+game-item.empty,
+options-container .term-list .entry.empty {
   background-color: rgba( 75, 75, 75, 0.75 );
   opacity: 0.5;
 }
 
-game-item > :first-child {
+game-item > :first-child,
+options-container .term-list .entry > :first-child {
   position: absolute;
   top: 5px;
   bottom: 5px;
@@ -260,19 +263,22 @@ game-item > :first-child {
   text-shadow: 0px 0px 5px #000000, 0px 0px 20px #0087FF;
 }
 
-game-item.active > :first-child {
+game-item.active > :first-child,
+options-container .term-list .entry.active > :first-child {
   background-color: #0087FF;
   box-shadow: inset 0px 0px 15px #FFFFFF;
   text-shadow: 0px 0px 5px #000000, 0px 0px 20px #444444;
 }
 
-game-item.bad > :first-child {
+game-item.bad > :first-child,
+options-container .term-list .entry.bad > :first-child {
   background-color: #6B5FAB;
   box-shadow: inset 0px 0px 15px #F0577D;
   text-shadow: 0px 0px 5px #000000, 0px 0px 20px #770000;
 }
 
-game-item.empty > :first-child {
+game-item.empty > :first-child,
+options-container .term-list .entry.empty > :first-child {
   background-color: transparent;
   box-shadow: none;
   text-shadow: 0px 0px 5px #000000, 0px 0px 20px #444444;
@@ -434,3 +440,60 @@ options-container .letter-list > game-item > :first-child {
   right: 2px;
   bottom: 2px;
 }
+
+
+options-container .term-list {
+  margin-left: 60px;
+  margin-right: 60px;
+  overflow-y: auto;
+  height: 100%;
+  letter-spacing: initial!important;
+  text-align: justify;
+  text-align-last: justify;
+}
+
+options-container .term-list .entry {
+  display: inline-block;
+  height: 50px;
+  width: 370px;
+  position: relative;
+  color: #FFFFFF;
+  cursor: pointer;
+  margin-top: 3px;
+  margin-bottom: 6px;
+  text-align: center;
+  text-align-last: center;
+}
+
+options-container .term-list .entry > :first-child {
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  padding-top: 9px;
+  font-size: 16px;
+  letter-spacing: 3px;
+}
+
+options-container .term-list .customTermInput {
+  color: #C1C3B6;
+  font-size: 16px;
+  text-align: left;
+  text-align-last: left;
+}
+
+options-container .customTermInput + .entry {
+  vertical-align: top;
+}
+
+options-container .term-list .entry > input:first-child {
+  width: calc( 100% - 4px );
+  padding-top: 0px;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+options-container .term-list .doit {
+  color: #FFFFFF;
+}
+
