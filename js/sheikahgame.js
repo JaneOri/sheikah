@@ -527,9 +527,9 @@ can.Component.extend({
         knob.val( val ).trigger('change');
       }, interval );
     },
-    "{document} keyup": function ( $doc, $ev ) {
+    "{document} keypress": function ( $doc, $ev ) {
       var vm = this.viewModel;
-      var key = $ev.key;
+      var key = String.fromCharCode( $ev.which );
       var validGameInput = rxTest( acceptCharsRx, key );
 
       if ( validGameInput ) {
