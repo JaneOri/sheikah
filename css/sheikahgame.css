@@ -159,6 +159,7 @@ game-container > .info-box {
 
 game-container > .info-box .knob-container {
   width: 70px;
+  height: 70px;
 }
 
 game-container > .info-box .streak {
@@ -495,5 +496,152 @@ options-container .term-list .entry > input:first-child {
 
 options-container .term-list .doit {
   color: #FFFFFF;
+}
+
+
+/* mobile/small screen changes */
+@media all and (max-width: 900px) {
+
+  game-container {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+  }
+
+  game-container .learn-container {
+    top: 15vw;
+    left: 0px;
+    right: 0px;
+    height: 7vw;
+  }
+
+  game-container .learn-container > * {
+    font-size: 4vw;
+    width: 4vw;
+  }
+
+  game-container .learn-container .current:before {
+    width: 6vw;
+  }
+
+  game-container > game-item {
+    top: 25vw;
+    left: 5vw;
+    bottom: initial;
+    width: 50vw;
+    height: 50vw;
+  }
+
+  game-container > game-item > :first-child {
+    font-size: 30vw;
+    padding-top: 5vw;
+  }
+
+  game-container > .info-box {
+    top: 25vw;
+    width: 100%;
+    left: 0px;
+    height: 50vw;
+  }
+
+
+  game-container > .info-box .knob-container {
+    width: 7vw;
+    height: 7vw;
+    position: absolute;
+    bottom: -2vw;
+    left: 3vw;
+    border: 0.5vw solid #FFFFFF;
+    border-radius: 50%;
+  }
+
+  game-container > .info-box .term-streak {
+    top: 0px;
+    font-size: 4vw;
+  }
+
+  game-container > .info-box .streak {
+    font-size: 2.5vw
+  }
+
+  game-container > .info-box .game-count {
+    top: 11vw;
+    font-size: 4vw;
+  }
+  game-container > .info-box .running-score {
+    top: 22vw;
+    font-size: 4vw;
+  }
+
+  game-container > .info-box .instruction {
+    position: absolute;
+    left: initial;
+    top: 32vw;
+    width: 40vw;
+    font-size: 4vw;
+    right: 0px;
+  }
+
+  options-container .title-info {
+    font-size: 0px;
+  }
+  options-container .title-info:before {
+    content: "Tap here to close";
+    font-size: 16px;
+  }
+
+  options-container .pannels {
+    top: 110px;
+    width: 100%;
+  }
+
+  options-container .pannels .option {
+    width: 15vw;
+  }
+  options-container .pannels .option-name {
+    font-size: 4vw;
+    display: block;
+  }
+  options-container .pannels .learn {
+    font-size: 10vw;
+  }
+
+  options-container .pannel {
+    top: 220px;
+    width: 100%;
+    height: calc( 100% - 220px - 5vw );
+  }
+
+  options-container .letter-list {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+
+  options-container .letter-list > game-item {
+    width: 19vw;
+    height: 19vw;
+    margin-top: 2vw;
+    margin-bottom: 3vw;
+    margin-right: 2vw;
+  }
+
+  options-container .letter-list > game-item > :first-child {
+    font-size: 7vw;
+    padding-top: 3.5vw;
+  }
+
+  options-container .term-list {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+  options-container .term-list .entry {
+    width: 90vw;
+  }
+  options-container .term-list .entry > :first-child {
+    padding-top: 2.5vw;
+    font-size: 3.5vw;
+  }
+
+
 }
 
