@@ -483,6 +483,27 @@ options-container .term-list .entry > :first-child {
   letter-spacing: 3px;
 }
 
+options-container .term-list .streak {
+  position: absolute;
+  right: -5px;
+  bottom: -8px;
+  color: #FFFFFF;
+  display: block;
+  height: 20px;
+  width: 40px;
+  border-radius: 2px;
+  background: #000000;
+  text-align: center;
+  border: 1px solid #000000;
+  box-shadow: inset 0px 0px 4px #928D6F;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+options-container .term-list .streak.negative {
+  color: #F0577D;
+}
+
 options-container .term-list .customTermInput {
   color: #C1C3B6;
   font-size: 16px;

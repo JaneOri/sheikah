@@ -697,6 +697,9 @@ var optionsTemplate = fcs(function(){/*!
           {{#each cachedTerms}}
             <div class="entry {{termState( term )}}" ($click)="toggleTermEnabled( . )">
               <div>{{term}}</div>
+              {{#if streak}}
+                <div class="streak {{#if isNegative( streak )}}negative{{/if}}">{{streak}}</div>
+              {{/if}}
             </div>
           {{/each}}
         </div>
@@ -714,6 +717,9 @@ var optionsTemplate = fcs(function(){/*!
           {{#each cachedCustomTerms}}
             <div class="entry {{termState( term )}}" ($click)="toggleTermEnabled( . )">
               <div>{{term}}</div>
+              {{#if streak}}
+                <div class="streak {{#if isNegative( streak )}}negative{{/if}}">{{streak}}</div>
+              {{/if}}
             </div>
           {{/each}}
         </div>
@@ -847,6 +853,9 @@ can.Component.extend({
       } else {
         //TODO: give user feedback
       }
+    },
+    isNegative: function ( val ) {
+      return parseInt( val, 10 ) < 0;
     }
   },
   events: {
