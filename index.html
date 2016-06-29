@@ -26,8 +26,18 @@
 <body class="Sheikah">
   <script id="main" type="text/stache" can-autorender>
     <game-bg></game-bg>
-    <game-container {^functions}="functions" {^disabled-terms}="disabledTerms" {^custom-terms}="customTerms"></game-container>
-    <options-container {functions}="functions" {disabled-terms}="disabledTerms" {custom-terms}="customTerms"></options-container>
+    <game-container
+      {^functions}="functions"
+      {^disabled-terms}="disabledTerms"
+      {^custom-terms}="customTerms"
+      {cached-letters}="cachedLetters"
+    ></game-container>
+    <options-container
+      {functions}="functions"
+      {disabled-terms}="disabledTerms"
+      {custom-terms}="customTerms"
+      {^cached-letters}="cachedLetters"
+    ></options-container>
   </script>
 </body>
 </html>

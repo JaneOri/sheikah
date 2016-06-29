@@ -203,6 +203,13 @@ game-container > .info-box .instruction {
   font-size: 20px;
 }
 
+game-container > .info-box .help {
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
 game-container > game-item {
   position: absolute;
   top: 100px;
@@ -498,6 +505,42 @@ options-container .term-list .doit {
   color: #FFFFFF;
 }
 
+game-keyboard {
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  padding: 10px;
+}
+
+game-keyboard > * {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 40px;
+  margin: 1px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  border-width: 3px;
+}
+
+game-keyboard > .spacebar {
+  width: 92px;
+}
+
+game-keyboard > * :first-child {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  color: #FFFFFF;
+  text-align: center;
+  padding-top: 12px;
+  font-size: 14px;
+}
+game-keyboard > * .reveal {
+  height: 18px;
+}
+
 
 /* mobile/small screen changes */
 @media all and (max-width: 900px) {
@@ -506,6 +549,14 @@ options-container .term-list .doit {
     width: 100%;
     height: 100%;
     top: 0px;
+    border-radius: 0px;
+  }
+
+  game-container .options-link {
+    font-size: 5vw;
+  }
+  game-container .options-link * {
+    font-size: 9vw;
   }
 
   game-container .learn-container {
@@ -536,6 +587,9 @@ options-container .term-list .doit {
     font-size: 30vw;
     padding-top: 5vw;
   }
+  game-container > game-item > .hylianSymbols-sheikah:first-child {
+    font-size: 50vw;
+  }
 
   game-container > .info-box {
     top: 25vw;
@@ -543,7 +597,6 @@ options-container .term-list .doit {
     left: 0px;
     height: 50vw;
   }
-
 
   game-container > .info-box .knob-container {
     width: 7vw;
@@ -580,6 +633,13 @@ options-container .term-list .doit {
     width: 40vw;
     font-size: 4vw;
     right: 0px;
+  }
+
+  game-container > .info-box .help {
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 4vw;
+    margin-top: 4vw;
   }
 
   options-container .title-info {
@@ -642,6 +702,9 @@ options-container .term-list .doit {
     font-size: 3.5vw;
   }
 
-
+  game-keyboard {
+    top: 80vw;
+    text-align: justify;
+  }
 }
 

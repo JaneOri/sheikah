@@ -53,7 +53,7 @@ var gameItemTemplate = fcs(function(){/*!
   {{#is display "sheikah"}}
     <div class="hylianSymbols-sheikah"></div>
   {{else}}
-    <div class="learn">{{display}}</div>
+    <div class="{{learnClass}}">{{display}}</div>
   {{/is}}
 
   {{#if reveal}}
@@ -71,10 +71,89 @@ can.Component.extend({
   template: can.stache( gameItemTemplate ),
   viewModel: {
     define: {
+      learnClass: {
+        value: "learn"
+      },
       streakIsNegative: {
         get: function () {
           return ( this.attr( "streak" ) + "" ).indexOf( "-" ) === 0;
         }
+      }
+    }
+  },
+  events: {
+    init: function ( $el ) {
+      var vm = this.viewModel;
+    }
+  }
+});
+
+
+var gameKeyboardTemplate = fcs(function(){/*!
+
+  {{#each cachedLetters}}
+    <game-item
+      class="{{termState( term )}}"
+      {display}="term"
+      {reveal}="revealLetter"
+      {learn-class}="learnClass"
+      {streak}="0"
+      ($click)="termAsInput( . )"
+    ></game-item>
+  {{/each}}
+
+  <game-item
+    class="active spacebar"
+    {display}="'' '"
+    {reveal}="0"
+    {learn-class}=""
+    {streak}="0"
+    ($click)="spaceAsInput()"
+  ></game-item>
+
+*/});
+
+can.Component.extend({
+  tag: "game-keyboard",
+  template: can.stache( gameKeyboardTemplate ),
+  viewModel: {
+    define: {
+      learnClass: {
+        get: function () {
+          if ( this.attr( "teach" ) ) {
+            return "learn";
+          }
+          return "";
+        }
+      },
+      revealLetter: {
+        get: function () {
+          if ( this.attr( "teach" ) ) {
+            return true;
+          }
+          return false;
+        }
+      }
+    },
+    termState: function ( term ) {
+      var state = ""; // "empty", "bad", "active", ""
+      if ( !this.functions.termValidRxCheck( term ) ) {
+        state = "bad";
+      } else if ( term.length > 1 && !this.functions.termValidLetterCheck( term ) ) {
+        state = "empty";
+      } else if ( this.functions.getTermInfo( term ).attr( "enabled" ) ) {
+        state = "active";
+      }
+      return state;
+    },
+    termAsInput: function ( term ) {
+      if ( this.functions && typeof this.functions.checkInput === "function" ) {
+        this.functions.checkInput( term.termLC );
+      }
+    },
+    spaceAsInput: function () {
+      if ( this.functions && typeof this.functions.checkInput === "function" ) {
+        this.functions.checkInput( " " );
       }
     }
   },
@@ -117,8 +196,12 @@ var gameTemplate = fcs(function(){/*!
     </div>
     <div class="instruction">
       Type the current letter shown on the left.
+      <div class="help" ($click)="teachMe()">Show Key</div>
     </div>
   </div>
+  {{#if showKeyboard}}
+    <game-keyboard {cached-letters}="cachedLetters" {functions}="functions" {teach}="teach"></game-keyboard>
+  {{/if}}
   <div class="options-link">Options <i class="hylianSymbols-hylian"></i></div>
 
 */});
@@ -267,10 +350,22 @@ can.Component.extend({
 
       roundTimeLimit: {
         get: function () {
+          var showKeyboard = this.attr( "showKeyboard" );
           var currentTerm = this.attr( "currentTerm" );
-          var baseTime = 25000;
-          var timeLimit = baseTime + 250 * currentTerm.length;
+          var baseTime = showKeyboard ? 35000 : 25000;
+          var perLetterExtension = showKeyboard ? 2000 : 250;
+          var timeLimit = baseTime + ( perLetterExtension * currentTerm.length );
           return timeLimit;
+        }
+      },
+
+      teach: {
+        value: false
+      },
+      showKeyboard: {
+        get: function ( last ) {
+          var screensize = document && document.body && document.body.offsetWidth || 1000;
+          return screensize <= 900 || this.attr( "teach" ) || last;
         }
       }
     },
@@ -278,6 +373,11 @@ can.Component.extend({
     terms: terms, //global array in listofterms.js
     gameState: 0, // "won", "failed", "paused", 0 ( normal )
     currentLetterIndex: 0,
+
+    teachMe: function () {
+      this.attr( "teach", true );
+      this.startTimer();
+    },
 
     isNegative: function ( val ) {
       return parseInt( val, 10 ) < 0;
@@ -383,19 +483,22 @@ can.Component.extend({
       var gotItRight = currentLetter.toLowerCase() === inputChar.toLowerCase();
       var currentLetterIndex = this.attr( "currentLetterIndex" );
       var isLastLetter = ( currentTerm.length - 1 ) === currentLetterIndex;
+      var teach = this.attr( "teach" );
 
-      var score = this.attr( "score" );
-      score += gotItRight ? 1 : -1;
-      localStorage.setItem( "score", score );
-      this.attr( "score", score );
+      if ( !teach ) {
+        var score = this.attr( "score" );
+        score += gotItRight ? 1 : -1;
+        localStorage.setItem( "score", score );
+        this.attr( "score", score );
+      }
 
-      if ( gotItRight ) {
+      if ( !teach && gotItRight ) {
         this.updateStreak( currentLetter, gotItRight );
       }
 
       if ( gotItRight && isLastLetter ) {
         this.attr( "gameState", "won" );
-        if ( currentTerm.length > 1 ) {
+        if ( !teach && currentTerm.length > 1 ) {
           this.updateStreak( currentTerm, gotItRight );
         }
         this.winSequenceStart();
@@ -407,9 +510,11 @@ can.Component.extend({
 
       if ( !gotItRight ) {
         this.attr( "gameState", "failed" );
-        this.updateStreak( currentLetter, gotItRight );
-        if ( currentTerm.length > 1 ) {
-          this.updateStreak( currentTerm, gotItRight );
+        if ( !teach ) {
+          this.updateStreak( currentLetter, gotItRight );
+          if ( currentTerm.length > 1 ) {
+            this.updateStreak( currentTerm, gotItRight );
+          }
         }
 
         setTimeout( this.newGame.bind( this ), 2000 );
@@ -447,6 +552,7 @@ can.Component.extend({
     },
 
     newGame: function () {
+      this.attr( "teach", false );
       var gameCount = parseInt( this.attr( "gameCount" ), 10 );
       this.attr( "gameCount", ++gameCount );
       localStorage.setItem( "gameCount", gameCount );
@@ -461,6 +567,7 @@ can.Component.extend({
     startTimer: function () {
       var knob = $( "#round-timer" );
       var maxTime = this.attr( "roundTimeLimit" );
+      var teach = this.attr( "teach" );
 
       var config = {
         min: 0,
@@ -468,14 +575,14 @@ can.Component.extend({
         readOnly: true,
         displayInput: false,
         fgColor: "#000000",
-        bgColor: "#01AF47",
+        bgColor: teach ? "#FFDB6E" : "#01AF47",
         width: "100%",
         thickness: 0.6
       };
 
       knob.trigger( "configure", config );
 
-      knob.val( 0 ).trigger('change');
+      knob.val( teach ? knob.val() : 0 ).trigger('change');
     }
   },
 
@@ -487,7 +594,8 @@ can.Component.extend({
         togglePause: vm.togglePause.bind( vm ),
         getTermInfo: vm.getTermInfo.bind( vm ),
         termValidRxCheck: vm.termValidRxCheck.bind( vm ),
-        termValidLetterCheck: vm.termValidLetterCheck.bind( vm )
+        termValidLetterCheck: vm.termValidLetterCheck.bind( vm ),
+        checkInput: vm.checkInput.bind( vm )
       });
     },
     inserted: function () {
@@ -495,7 +603,7 @@ can.Component.extend({
       var knob = $( "#round-timer" );
       knob.knob({
         min: 0,
-        max: 30000,
+        max: vm.attr( "roundTimeLimit" ) || 30000,
         readOnly: true,
         displayInput: false,
         fgColor: "#000000",
@@ -514,11 +622,13 @@ can.Component.extend({
 
         var maxTime = vm.attr( "roundTimeLimit" ) || 30000;
         var val = parseInt( knob.val(), 10 );
+        var teach = vm.attr( "teach" );
 
-        val += interval;
+        val += teach ? 0 : interval;
+
         if ( val < 0 ) {
           val = 0;
-        } else if ( val > maxTime ) {
+        } else if ( val >= maxTime ) {
           val = maxTime;
           //foce failure
           vm.checkInput( "`" );
@@ -630,7 +740,7 @@ var optionsTemplate = fcs(function(){/*!
       {{#case "A"}}
         <div class="about">
           * Sheikah script decoded by [whoever] -- link to that thread found on reddit<br>
-          * Sheikah font created by <a href="https://github.com/ophereon/sheikah">ophereon</a><br>
+          * Sheikah font created by <a href="https://ophereon.github.io/sheikah/">ophereon</a><br>
           * Other fonts found on <a href="http://zeldauniverse.net/media/fonts/">Zelda Universe</a><br>
           * This app created by <a href="https://github.com/James0x57/sheikah">James0x57</a>, for fun.
         </div>
