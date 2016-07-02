@@ -14,16 +14,45 @@ var termCache = new can.Map();
 
 can.Component.extend({
   tag: "game-bg",
-  template: can.stache( "" ),
+  template: can.stache( "<div></div>" ),
   viewModel: {
     define: {
+      randomBgCount: {
+        value: 0
+      },
       randomBg: {
         get: function () {
+          this.attr( "randomBgCount" );
           var bgs = this.attr( "backgrounds" );
           var rand = ~~( Math.random() * bgs.length );
           return bgs[ rand ];
         }
+      },
+      randomStartPos: {
+        get: function () {
+          this.attr( "randomBgCount" );
+          var positions = this.attr( "positions" );
+          var rand = ~~( Math.random() * positions.length );
+          return positions[ rand ];
+        }
       }
+    },
+    /*
+      1 2 3
+      4 5 6
+      7 8 9
+    */
+    positions: [1,2,3,4,5,6,7,8,9],
+    positionLocations: {
+      1: { x: 0, y: 0 },
+      2: { x: 50, y: 0 },
+      3: { x: 100, y: 0 },
+      4: { x: 0, y: 50 },
+      5: { x: 50, y: 50 },
+      6: { x: 100, y: 50 },
+      7: { x: 0, y: 100 },
+      8: { x: 50, y: 100 },
+      9: { x: 100, y: 100 }
     },
     backgrounds: [
       "images/0.jpg",
@@ -34,15 +63,52 @@ can.Component.extend({
       "images/5.jpg",
       "images/6.jpg",
       "images/7.jpg"
-    ]
+    ],
+
+    newBGTransition: function ( randomBg ) {
+      var $el = this.attr( "$el" );
+      var positionLocations = this.attr( "positionLocations" );
+      var randomStartLoc = positionLocations.attr( this.attr( "randomStartPos" ) );
+
+      $el.find( "div" ).css({
+        opacity: 0,
+        backgroundImage: 'url( "' + randomBg + '" )',
+        backgroundPositionX: randomStartLoc.x + "%",
+        backgroundPositionY: randomStartLoc.y + "%"
+      });
+
+      $el.find( "div" ).animate({
+        opacity: 1
+      }, 1000, "linear", function () {
+        $el.css({
+          backgroundImage: 'url( "' + randomBg + '" )',
+          backgroundPositionX: randomStartLoc.x + "%",
+          backgroundPositionY: randomStartLoc.y + "%"
+        });
+        $el.find( "div" ).css({
+          opacity: 0,
+          backgroundImage: "none"
+        });
+      });
+    },
+
+    newBG: function () {
+      var randomBgCount = this.attr( "randomBgCount" );
+      this.attr( "randomBgCount", ++randomBgCount );
+      var randomBg = this.attr( "randomBg" );
+
+      var newImg = new Image();
+      newImg.onload = this.newBGTransition.bind( this, randomBg );
+      newImg.src = randomBg;
+
+      setTimeout( this.newBG.bind( this ), 60000 );
+    }
   },
   events: {
     init: function ( $el ) {
       var vm = this.viewModel;
       vm.attr( "$el", $el );
-      $el.css({
-        backgroundImage: 'url( "' + vm.attr( "randomBg" ) + '" )'
-      });
+      vm.newBG();
     }
   }
 });
@@ -287,14 +353,14 @@ can.Component.extend({
       },
       score: {
         value: function () {
-          var score = parseInt( localStorage && localStorage.getItem( "score" ) || "0", 10 );
+          var score = parseInt( localStorage.getItem( "score" ) || "0", 10 );
 
           return score;
         }
       },
       customTerms: {
         value: function () {
-          var termString = localStorage && localStorage.getItem( "customTerms" ) || "";
+          var termString = localStorage.getItem( "customTerms" ) || "";
           var termList = termString.split( "`" );
           if ( !termList[ 0 ] ) {
             termList = [];
@@ -304,7 +370,7 @@ can.Component.extend({
       },
       disabledTerms: {
         value: function () {
-          var termString = localStorage && localStorage.getItem( "disabledTerms" ) || "";
+          var termString = localStorage.getItem( "disabledTerms" ) || "";
           var termList = termString.toLowerCase().split( "`" );
           if ( !termList[ 0 ] ) {
             termList = [];
@@ -726,29 +792,74 @@ var optionsTemplate = fcs(function(){/*!
       {{/case}}
 
       {{#case "F"}}
-        <div class="fonts">
-          * Sheikah -- Breath of the Wild<br>
-          * Twilight Era Hylian -- Twilight Princess ( GCN )<br>
-          * Gerudo -- OoT<br>
-          * Ancient Hylian -- Skyward Sterm --> 4 of the characters are used twice GQ, IX, OZ, PT
+        <div class="fonts about">
+          Options not yet implemented
+          <div class="active">
+            Sheikah -- Breath of the Wild
+          </div>
+          <div>
+            Twilight Era Hylian -- Twilight Princess ( GCN )
+          </div>
+          <div>
+            Gerudo -- OoT
+          </div>
+          <div>
+            Ancient Hylian -- Skyward Sterm --> 4 of the characters are used twice GQ, IX, OZ, PT
+          </div>
         </div>
       {{/case}}
 
       {{#case "S"}}
-        <div class="save-data">
-          * clear list of custom terms<br>
-          * clear list of disabled terms<br>
-          * clear all streaks and scores<br>
-          * delete all localStorage data
+        <div class="save-data about">
+          <div ($mousedown)="attr( 'clearSaveData', 'customTerms' )" class="{{#is clearSaveData 'customTerms'}}expanded{{/is}}">
+            Clear list of custom terms
+            <div class="areyousure" {{^is clearSaveData 'customTerms'}}style="display:none;"{{/is}}>
+              Are you sure?
+              <span ($click)="doClearSaveData()">Yes</span>
+              <span ($click)="attr( 'clearSaveData', 'none' )">No</span>
+            </div>
+          </div>
+          <div ($mousedown)="attr( 'clearSaveData', 'disabledTerms' )" class="{{#is clearSaveData 'disabledTerms'}}expanded{{/is}}">
+            Clear list of disabled letters and terms
+            <div class="areyousure" {{^is clearSaveData 'disabledTerms'}}style="display:none;"{{/is}}>
+              Are you sure?
+              <span ($click)="doClearSaveData()">Yes</span>
+              <span ($click)="attr( 'clearSaveData', 'none' )">No</span>
+            </div>
+          </div>
+          <div ($mousedown)="attr( 'clearSaveData', 'streaks' )" class="{{#is clearSaveData 'streaks'}}expanded{{/is}}">
+            Clear all streaks and scores
+            <div class="areyousure" {{^is clearSaveData 'streaks'}}style="display:none;"{{/is}}>
+              Are you sure?
+              <span ($click)="doClearSaveData()">Yes</span>
+              <span ($click)="attr( 'clearSaveData', 'none' )">No</span>
+            </div>
+          </div>
+          <div ($mousedown)="attr( 'clearSaveData', 'allthethings' )" class="{{#is clearSaveData 'allthethings'}}expanded{{/is}}">
+            Delete all localStorage data
+            <div class="areyousure" {{^is clearSaveData 'allthethings'}}style="display:none;"{{/is}}>
+              Are you sure?
+              <span ($click)="doClearSaveData()">Yes</span>
+              <span ($click)="attr( 'clearSaveData', 'none' )">No</span>
+            </div>
+          </div>
         </div>
       {{/case}}
 
       {{#case "A"}}
         <div class="about">
-          * Sheikah script decoded by [whoever] -- link to that thread found on reddit<br>
-          * Sheikah font created by <a href="https://ophereon.github.io/sheikah/">ophereon</a><br>
-          * Other fonts found on <a href="http://zeldauniverse.net/media/fonts/">Zelda Universe</a><br>
-          * This app created by <a href="https://github.com/James0x57/sheikah">James0x57</a>, for fun.
+          <a href="http://www.neogaf.com/forum/showthread.php?p=207210063#post207210063" target="_blank">
+            Sheikah script decoded by RagnarokX on NeoGAF
+          </a>
+          <a href="https://ophereon.github.io/sheikah/" target="_blank">
+            Sheikah font created by ophereon
+          </a>
+          <a href="http://zeldauniverse.net/media/fonts/" target="_blank">
+            Other fonts found on Zelda Universe
+          </a>
+          <a href="https://github.com/James0x57/sheikah" target="_blank">
+            This app created by James0x57, for fun.
+          </a>
         </div>
       {{/case}}
     {{/switch}}
@@ -815,8 +926,31 @@ can.Component.extend({
       { letter: "S", name: "Save Data" },
       { letter: "A", name: "About" }
     ],
+
+    clearSaveData: "none",
+    doClearSaveData: function () {
+      var whatData = this.attr( "clearSaveData" );
+      if ( whatData === "customTerms" || whatData === "disabledTerms" ) {
+        localStorage.removeItem( whatData );
+      } else if ( whatData === "streaks" ) {
+        localStorage.removeItem( "gameCount" );
+        localStorage.removeItem( "score" );
+        for ( var i = 0; i < localStorage.length; i++ ) {
+          var key = localStorage.key( i );
+          if ( key.indexOf( "streak_" ) === 0 ) {
+            localStorage.removeItem( key );
+            i--;
+          }
+        }
+      } else if ( whatData === "allthethings" ) {
+        localStorage.clear();
+      }
+      window.location = window.location.href;
+    },
+
     currentPannel: "L",
     showPannel: function ( pannelLetter ) {
+      this.attr( "clearSaveData", "none" );
       this.attr( "currentPannel", pannelLetter );
     },
     termState: function ( term ) {

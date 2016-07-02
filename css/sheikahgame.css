@@ -1,6 +1,7 @@
 /*
   silver C1C3B6
   gold 928D6F
+  blue 0087FF
   red F0577D
   purple 6B5FAB
 */
@@ -42,7 +43,7 @@ body.inverted.Sheikah *.learn {
 
 
 
-body, game-bg, options-container {
+body, game-bg, game-bg > div, options-container {
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -449,7 +450,6 @@ options-container .letter-list > game-item > :first-child {
   bottom: 2px;
 }
 
-
 options-container .term-list {
   margin-left: 60px;
   margin-right: 60px;
@@ -524,6 +524,67 @@ options-container .term-list .entry > input:first-child {
 
 options-container .term-list .doit {
   color: #FFFFFF;
+}
+
+options-container .about {
+  margin-left: 60px;
+  margin-right: 60px;
+  overflow-y: auto;
+  height: 100%;
+  letter-spacing: initial!important;
+}
+
+options-container .about > * {
+  color: #C1C3B6;
+  display: block;
+  font-size: 24px;
+  background-color: rgba( 0, 0, 0, 0.5 );
+  padding: 20px;
+  padding-left: 30px;
+  text-decoration: none;
+  margin-bottom: 20px;
+  border: 4px solid rgba( 0, 0, 0, 0.0 );
+  box-shadow: inset 0px 0px 2px #C1C3B6;
+  position: relative;
+  cursor: pointer;
+}
+
+options-container .about > *:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 10px;
+  height: 100%;
+  background-color: #0087FF;
+}
+
+options-container .fonts > *:before {
+  background-color: rgba( 0, 0, 0, 0.5 );
+}
+options-container .fonts > .active:before {
+  background-color: #0087FF;
+}
+
+options-container .save-data > .expanded {
+  cursor: auto;
+}
+options-container .save-data > *:before {
+  background-color: #6B5FAB;
+}
+options-container .save-data > .expanded:before {
+  background-color: #F0577D;
+}
+
+options-container .save-data .areyousure {
+  font-size: 24px;
+  margin-top: 15px;
+}
+options-container .save-data .areyousure > * {
+  font-size: 24px;
+  margin: 5px;
+  cursor: pointer;
 }
 
 game-keyboard {
@@ -721,6 +782,30 @@ game-keyboard > * .reveal {
   options-container .term-list .entry > :first-child {
     padding-top: 2.5vw;
     font-size: 3.5vw;
+  }
+
+  options-container .about {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+
+  options-container .about > * {
+    font-size: 5vw;
+    padding: 5vw;
+    margin-bottom: 3vw;
+  }
+
+  options-container .about > *:before {
+    width: 10px;
+  }
+
+  options-container .save-data .areyousure {
+    font-size: 5vw;
+    margin-top: 5vw;
+  }
+  options-container .save-data .areyousure > * {
+    font-size: 5vw;
+    margin: 5px;
   }
 
   game-keyboard {
