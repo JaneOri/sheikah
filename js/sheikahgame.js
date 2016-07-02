@@ -804,7 +804,7 @@ var optionsTemplate = fcs(function(){/*!
             Gerudo -- OoT
           </div>
           <div>
-            Ancient Hylian -- Skyward Sterm --> 4 of the characters are used twice GQ, IX, OZ, PT
+            Ancient Hylian -- Skyward Sword --> 4 of the characters are used twice GQ, IX, OZ, PT
           </div>
         </div>
       {{/case}}
