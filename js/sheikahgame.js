@@ -1,5 +1,5 @@
 
-var acceptCharsRx = /^[a-pr-z0-9 ]+$/gi; // font also has '/' and '_' buuuut not using for now
+var acceptCharsRx = /^[a-z0-9 .!?-]+$/gi; // font also has '/' and '_' buuuut not using for now
 var rxTest = function ( rx, val ) {
   rx.lastIndex = 0; //fix stupid regexp caveat with global flag
   return rx.test( val );
@@ -477,6 +477,7 @@ can.Component.extend({
 
     getTermInfo: function ( term ) {
       var termLC = term.toLowerCase();
+      termLC = termLC.replace(/\./g, "@period@");
       if ( termCache.attr( termLC ) ) {
         return termCache.attr( termLC );
       }
@@ -751,10 +752,10 @@ var optionsTemplate = fcs(function(){/*!
               ($click)="toggleTermEnabled( . )"
             ></game-item>
           {{/each}}
-          <game-item {display}="" class="empty"></game-item>
-          <game-item {display}="" class="empty"></game-item>
-          <game-item {display}="" class="empty"></game-item>
-          <game-item {display}="" class="empty"></game-item>
+          <!-- game-item {display}="" class="empty"></game-item -->
+          <!-- game-item {display}="" class="empty"></game-item -->
+          <!-- game-item {display}="" class="empty"></game-item -->
+          <!-- game-item {display}="" class="empty"></game-item -->
         </div>
       {{/case}}
 
@@ -793,16 +794,16 @@ var optionsTemplate = fcs(function(){/*!
 
       {{#case "F"}}
         <div class="fonts about">
-          Options not yet implemented
-          <div class="active">
+          <div class="{{#is currentFont 'Sheikah'}}active{{else}}not-selected{{/is}}" ($click)="attr('currentFont', 'Sheikah')">
             Sheikah -- Breath of the Wild
           </div>
-          <div>
+          <div class="{{#is currentFont 'Gerudo'}}active{{else}}not-selected{{/is}}" ($click)="attr('currentFont', 'Gerudo')">
+            Gerudo -- OoT and BotW
+          </div>
+          <div class="{{#is currentFont 'TPGCN'}}active{{else}}not-selected{{/is}}" ($click)="attr('currentFont', 'TPGCN')">
             Twilight Era Hylian -- Twilight Princess ( GCN )
           </div>
-          <div>
-            Gerudo -- OoT
-          </div>
+          Options not yet implemented:
           <div>
             Ancient Hylian -- Skyward Sword --> 4 of the characters are used twice GQ, IX, OZ, PT
           </div>
@@ -852,7 +853,10 @@ var optionsTemplate = fcs(function(){/*!
             Sheikah script decoded by RagnarokX on NeoGAF
           </a>
           <a href="https://ophereon.github.io/sheikah/" target="_blank">
-            Sheikah font created by ophereon
+            Original Sheikah font created by ophereon
+          </a>
+          <a href="https://fontstruct.com/fontstructions/show/1371125/sheikah-complete" target="_blank">
+            Sheikah Complete font created by Xhamon
           </a>
           <a href="http://zeldauniverse.net/media/fonts/" target="_blank">
             Other fonts found on Zelda Universe
@@ -879,7 +883,7 @@ can.Component.extend({
           }
           var cachedLetters = new can.List( [] );
           if ( this.functions && typeof this.functions.getTermInfo === "function" ) {
-            var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split( "" );
+            var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!?-".split( "" );
             for ( var i = 0; i < letters.length; i++ ) {
               cachedLetters.push( this.functions.getTermInfo( letters[ i ] ) );
             }
@@ -915,6 +919,23 @@ can.Component.extend({
             }
           }
           return cachedCustomTerms;
+        }
+      },
+      currentFont: {
+        value: "Sheikah",
+        set: function ( newVal ) {
+          var lastVal = this._lastFontVal || "Sheikah";
+          $( document.body ).removeClass( lastVal );
+          $( document.body ).addClass( newVal );
+          this._lastFontVal = newVal;
+          return newVal;
+        }
+      },
+      inverted: {
+        value: false,
+        type: "boolean",
+        set: function ( newVal ) {
+          $( document.body )[newVal ? "addClass" : "removeClass"]( "inverted" );
         }
       }
     },

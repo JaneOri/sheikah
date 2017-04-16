@@ -41,6 +41,44 @@ body.inverted.Sheikah *.learn {
 }
 
 
+body.Gerudo *.learn {
+  font-family: Gerudo;
+}
+
+body.inverted.Gerudo,
+body.inverted.Gerudo * {
+  font-family: Gerudo;
+  letter-spacing: 4px;
+}
+
+body.inverted.Gerudo options-container .pannels .option-name {
+  font-size: 10px;
+}
+
+body.inverted.Gerudo *.learn {
+  font-family: sans-serif;
+}
+
+
+body.TPGCN *.learn {
+  font-family: TPGCN;
+}
+
+body.inverted.TPGCN,
+body.inverted.TPGCN * {
+  font-family: TPGCN;
+  letter-spacing: 4px;
+}
+
+body.inverted.TPGCN options-container .pannels .option-name {
+  font-size: 10px;
+}
+
+body.inverted.TPGCN *.learn {
+  font-family: sans-serif;
+}
+
+
 
 
 body, game-bg, game-bg > div, options-container {
@@ -174,6 +212,8 @@ game-container > .info-box .streak {
   border: 1px solid #000000;
   min-width: 50px;
   text-align: center;
+  /* sans-serif because gerudo font doesn't have all numbers yet */
+  font-family: sans-serif;
 }
 game-container > .info-box .negative {
   color: #F0577D;
@@ -479,7 +519,7 @@ options-container .term-list .entry > :first-child {
   right: 2px;
   bottom: 2px;
   padding-top: 9px;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 3px;
 }
 
@@ -566,6 +606,9 @@ options-container .fonts > *:before {
 options-container .fonts > .active:before {
   background-color: #0087FF;
 }
+options-container .fonts > .not-selected:before {
+  background-color: #6B5FAB;
+}
 
 options-container .save-data > .expanded {
   cursor: auto;
@@ -606,7 +649,7 @@ game-keyboard > * {
 }
 
 game-keyboard > .spacebar {
-  width: 92px;
+  width: 78px;
 }
 
 game-keyboard > * :first-child {

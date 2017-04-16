@@ -45,11 +45,23 @@
 
 @font-face {
   font-family: 'Sheikah';
-  src: url('../fonts/Sheikah.eot');
-  src: url('../fonts/Sheikah.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/Sheikah.woff') format('woff'),
-       url('../fonts/Sheikah.ttf') format('truetype'),
-       url('../fonts/Sheikah.svg#Sheikah') format('svg');
+  src: url('../fonts/Sheikah-Complete/Sheikah Complete.ttf');
+  src: url('../fonts/Sheikah-Complete/Sheikah Complete.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gerudo';
+  src: url('../fonts/Gerudo.ttf');
+  src: url('../fonts/Gerudo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TPGCN';
+  src: url('../fonts/TPHylian-GCNRegular.otf');
   font-weight: normal;
   font-style: normal;
 }
