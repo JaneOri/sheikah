@@ -936,6 +936,7 @@ can.Component.extend({
         type: "boolean",
         set: function ( newVal ) {
           $( document.body )[newVal ? "addClass" : "removeClass"]( "inverted" );
+          return newVal;
         }
       }
     },
@@ -1016,6 +1017,15 @@ can.Component.extend({
   events: {
     init: function ( $el ) {
       var vm = this.viewModel;
+    },
+    "{document} keyup": function ( $doc, $ev ) {
+      var vm = this.viewModel;
+      var curst = this._lastKeySeq || "";
+      curst = ( ($ev.keyCode || $ev.which).toString() + curst ).substr( 0, 20 );
+      this._lastKeySeq = curst;
+      if ( curst === "65663937393740403838" ) {
+        vm.attr( "inverted", !vm.attr( "inverted" ) );
+      }
     },
     ".title click": function () {
       var vm = this.viewModel;

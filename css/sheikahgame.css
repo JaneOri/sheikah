@@ -213,7 +213,7 @@ game-container > .info-box .streak {
   min-width: 50px;
   text-align: center;
   /* sans-serif because gerudo font doesn't have all numbers yet */
-  font-family: sans-serif;
+  font-family: sans-serif!important;
 }
 game-container > .info-box .negative {
   color: #F0577D;
@@ -366,6 +366,8 @@ game-item > .streak {
   box-shadow: inset 0px 0px 4px #928D6F;
   font-size: 14px;
   overflow: hidden;
+  /* sans-serif because gerudo font doesn't have all numbers yet */
+  font-family: sans-serif!important;
 }
 
 game-item > .streak.negative {
@@ -538,6 +540,8 @@ options-container .term-list .streak {
   box-shadow: inset 0px 0px 4px #928D6F;
   font-size: 14px;
   overflow: hidden;
+  /* sans-serif because gerudo font doesn't have all numbers yet */
+  font-family: sans-serif!important;
 }
 
 options-container .term-list .streak.negative {
