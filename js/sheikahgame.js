@@ -1,12 +1,10 @@
 
 var acceptCharsRx = /^[a-z0-9 .!?-]+$/gi; // font also has '/' and '_' buuuut not using for now
 var rxTest = function ( rx, val ) {
-  rx.lastIndex = 0; //fix stupid regexp caveat with global flag
+  rx.lastIndex = 0;
   return rx.test( val );
 };
-var fcs = function ( fn ) { //functionalCommentString
-  /*!Function By James Atherton - http://geckocodes.org/?hacker=James0x57 */
-  /*!You are free to copy and alter however you'd like so long as you leave the credit intact! =)*/
+var fcs = function ( fn ) {
   return fn.toString().replace( /^(\r?\n|[^\/])*\/\*!?(\r?\n)*|\s*\*\/(\r|\n|.)*$/gi, "" );
 };
 
@@ -861,8 +859,8 @@ var optionsTemplate = fcs(function(){/*!
           <a href="http://zeldauniverse.net/media/fonts/" target="_blank">
             Other fonts found on Zelda Universe
           </a>
-          <a href="https://github.com/James0x57/sheikah" target="_blank">
-            This app created by James0x57, for fun.
+          <a href="https://github.com/JaneOri/sheikah" target="_blank">
+            This app created by Jane Ori.
           </a>
         </div>
       {{/case}}
